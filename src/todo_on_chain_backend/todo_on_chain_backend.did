@@ -1,3 +1,36 @@
+type Messages = variant {
+    Success;
+    NotAuthorized;
+    NoSuchItem;
+};
+
+type TodoItem = record {
+    caller: principal;
+    id: nat64;
+    assignee: text;
+    description: text;
+    duration: nat64;
+    is_active: bool;
+    created_at: nat64;
+    updated_at: nat64;
+};
+
+type TodoItemView = record {
+    assignee: text;
+    description: text;
+    duration: nat64;
+    is_active: bool;
+};
+
+type Res = variant {
+    Ok: Messages;
+    Err : Messages;
+};
+
 service : {
-    "greet": (text) -> (text) query;
+    "fetch_all": () -> (opt vec  TodoItem ) query;
+    "get" : (nat64) -> (opt TodoItem) query;
+    "create": (TodoItemView) -> (opt TodoItem);
+    "update": (nat64, TodoItemView) -> (Res);
+    "delete": (nat64) -> (Res);
 }
